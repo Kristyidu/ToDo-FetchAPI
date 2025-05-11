@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Todo List</title>
+    <style>
+      .header {
+        font-size: 2em;
+      }
+
+      .done {
+        text-decoration: line-through;
+        color: gray;
+      }
+
+      button {
+        background-color: rgb(18, 175, 228) !important;
+        border: 1px solid #333;
+        color: black;
+        cursor: pointer;
+        width: 20%;
+        border-radius: 15px;
+      }
+
+      button:hover {
+        background-color: red !important;
+      }
+
+      body {
+        margin: 0;
+        font-family: sans-serif;
+      }
+
+      .container {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        align-items: center;
+        justify-content: flex-start;
+        padding-top: 40px;
+        background: linear-gradient(to right, #f30b58, #6738f1);
+      }
+
+      .input-section,
+      .list-section {
+        width: 40%;
+        background: #fcfafa;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+      }
+
+      .input-group {
+        display: flex;
+        gap: 10px;
+      }
+
+      .input-group input {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #ccc;
+      }
+
+      .list-section p {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin: 10px 0;
+      }
+
+      .list-section p span {
+        flex: 1;
+      }
+
+      .list-section button {
+        background-color: crimson !important;
+        border-radius: 4px;
+        height: 30px;
+        color: white;
+        width: 15%;
+      }
+
+      .list-section button:hover {
+        background-color: rgb(220, 150, 20) !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2 class="header">MY TODO LIST</h2>
+
+      <div class="input-section">
+        <div class="input-group">
+          <input type="text" id="todoInput" placeholder="Enter your todo" />
+          <button id="addBtn">Add</button>
+        </div>
+      </div>
+
+      <div class="list-section">
+        <h3>My Todos</h3>
+        <div id="todos"></div>
+      </div>
+    </div>
+
+    <footer
+      style="
+        background-color: beige;
+        margin: 10px;
+        bottom: auto;
+        text-align: center;
+      "
+    >
+      Click on my
+      <a href="" style="text-decoration: none; color: #333">GitHub</a> for more
+      ...
+    </footer>
+
+    <script>
+      const input = document.getElementById('todoInput');
+      const todos = document.getElementById('todos');
+      const addBtn = document.getElementById('addBtn');
+
+      // Add new todo from input
+      addBtn.addEventListener('click', () => {
+        const text = input.value.trim();
+        if (!text) return;
+
+        const id = Date.now();
+
+        const todo = document.createElement('p');
+        todo.innerHTML = `
+        <input type="checkbox" id="${id}" onchange="toggleDone('${id}')">
+        <span id="text-${id}">${text}</span>
+        <button onclick="deleteTodo('${id}')">Delete</button>
+      `;
+        todos.appendChild(todo);
+        input.value = '';
+      });
+
+      // Toggle done state
+      function toggleDone(id) {
+        const checkbox = document.getElementById(id);
+        const span = document.getElementById(`text-${id}`);
+        if (checkbox.checked) {
+          span.classList.add('done');
+        } else {
+          span.classList.remove('done');
+        }
+      }
+
+      // Delete todo item
+      function deleteTodo(id) {
+        const checkbox = document.getElementById(id);
+        const todo = checkbox.parentElement;
+        todo.remove();
+      }
+
+      // Fetch and display todos from JSONPlaceholder
+      fetch('https://jsonplaceholder.typicode.com/todos?_limit=30')
+        .then((response) => response.json())
+        .then((data) => {
+          data.forEach((todoItem) => {
+            const id = `api-${todoItem.id}`;
+            const todo = document.createElement('p');
+            todo.innerHTML = `
+            <input type="checkbox" id="${id}" ${
+              todoItem.completed ? 'checked' : ''
+            } onchange="toggleDone('${id}')">
+            <span id="text-${id}" class="${todoItem.completed ? 'done' : ''}">${
+              todoItem.title
+            }</span>
+            <button onclick="deleteTodo('${id}')">Delete</button>
+          `;
+            todos.appendChild(todo);
+          });
+        })
+        .catch((error) => console.error('Error loading todos:', error));
+    </script>
+  </body>
+</html>
