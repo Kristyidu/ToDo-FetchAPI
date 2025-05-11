@@ -7,6 +7,8 @@
     <style>
       .header {
         font-size: 2em;
+        text-align: center;
+        color: white;
       }
 
       .done {
@@ -54,12 +56,14 @@
       .input-group {
         display: flex;
         gap: 10px;
+        flex-wrap: wrap;
       }
 
       .input-group input {
         flex: 1;
         padding: 10px;
         border: 1px solid #ccc;
+        min-width: 0;
       }
 
       .list-section p {
@@ -68,10 +72,12 @@
         justify-content: space-between;
         gap: 10px;
         margin: 10px 0;
+        flex-wrap: wrap;
       }
 
       .list-section p span {
         flex: 1;
+        word-break: break-word;
       }
 
       .list-section button {
@@ -80,10 +86,53 @@
         height: 30px;
         color: white;
         width: 15%;
+        min-width: 70px;
       }
 
       .list-section button:hover {
         background-color: rgb(220, 150, 20) !important;
+      }
+
+      footer {
+        background-color: beige;
+        margin: 10px;
+        text-align: center;
+        padding: 10px;
+      }
+
+      /* MEDIA QUERIES FOR RESPONSIVENESS */
+      @media (max-width: 768px) {
+        .input-section,
+        .list-section {
+          width: 80%;
+        }
+
+        button {
+          width: 30%;
+        }
+
+        .list-section button {
+          width: 25%;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .input-section,
+        .list-section {
+          width: 95%;
+        }
+
+        .input-group {
+          flex-direction: column;
+        }
+
+        button {
+          width: 100%;
+        }
+
+        .list-section button {
+          width: 100%;
+        }
       }
     </style>
   </head>
@@ -104,14 +153,7 @@
       </div>
     </div>
 
-    <footer
-      style="
-        background-color: beige;
-        margin: 10px;
-        bottom: auto;
-        text-align: center;
-      "
-    >
+    <footer>
       Click on my
       <a
         href="https://github.com/Kristyidu/ToDo-FetchAPI"
